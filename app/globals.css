@@ -1,4 +1,4 @@
-@import "tailwindcss";
+/* @import "tailwindcss";
 
 :root {
   --background: #ffffff;
@@ -23,4 +23,38 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+} */
+
+@import "tailwindcss";
+
+:root {
+  --color-bgMain: #ffffff; /* fondo claro */
+  --color-textMain: #171717; /* texto oscuro */
+  --color-borderMain: #d1d5db; /* gris claro para bordes */
+  --color-accent: #000000; /* negro como acento */
+  --color-error: #ff0000; /* rojo para errores */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bgMain: #0a0a0a; /* fondo oscuro */
+    --color-textMain: #99a1af; /* texto claro */
+    --color-borderMain: #333333;
+    --color-accent: #364153; /* acento blanco */
+  }
+}
+
+body {
+  background: var(--color-bgMain);
+  color: var(--color-textMain);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+@theme {
+  --color-bgMain: #ffffff;
+  --color-textMain: #171717;
+  --color-borderMain: #d1d5db;
+  --color-accent: #000000;
+  --color-error: #ff0000;
+  --color-accentHover: oklch(70.4% 0.191 22.216);
 }
