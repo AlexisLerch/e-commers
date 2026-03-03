@@ -13,7 +13,7 @@ export default function Navbar({ cartCount = 0 }: { cartCount?: number }) {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="bg-bgMain font-bold text-textMain shadow-md p-4 flex justify-between items-center relative">
+    <nav className="bg-[#2e2b2b] font-bold text-textMain shadow-md p-3 sm:pr-14 sm:pl-14 flex justify-between items-center relative">
       {/* Logo */}
       <div className="text-3xl font-bold hover:text-accent transition-colors">
         <Link href="/">MiEcommerce</Link>
@@ -102,37 +102,77 @@ export default function Navbar({ cartCount = 0 }: { cartCount?: number }) {
 
       {/* Mobile Button */}
       <div className="md:hidden">
-        <button onClick={() => setMenuOpen(!menuOpen)}>☰</button>
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="relative w-8 h-8 flex flex-col justify-center items-center"
+        >
+          <span
+            className={`absolute h-0.5 w-6 bg-white transition-all duration-300 ${
+              menuOpen ? "rotate-45" : "-translate-y-2"
+            }`}
+          />
+          <span
+            className={`absolute h-0.5 w-6 bg-white transition-all duration-300 ${
+              menuOpen ? "opacity-0" : ""
+            }`}
+          />
+          <span
+            className={`absolute h-0.5 w-6 bg-white transition-all duration-300 ${
+              menuOpen ? "-rotate-45" : "translate-y-2"
+            }`}
+          />
+        </button>
       </div>
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="absolute top-full left-0 w-full bg-bgMain flex flex-col p-4 gap-4 md:hidden shadow-md">
-          <Link href="/product" onClick={() => setMenuOpen(false)}>
+        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[90%] max-w-sm bg-[#2e2b2b] rounded-xl shadow-lg flex flex-col p-6 gap-4 md:hidden z-50 transition-all duration-300 animate-in fade-in slide-in-from-top-2">
+          <Link
+            href="/product"
+            onClick={() => setMenuOpen(false)}
+            className="hover:text-accent transition-colors"
+          >
             Productos
           </Link>
-          <Link href="/cart" onClick={() => setMenuOpen(false)}>
+
+          <Link
+            href="/cart"
+            onClick={() => setMenuOpen(false)}
+            className="hover:text-accent transition-colors"
+          >
             Carrito
           </Link>
 
           {!session ? (
             <>
-              <Link href="/login" onClick={() => setMenuOpen(false)}>
+              <Link
+                href="/login"
+                onClick={() => setMenuOpen(false)}
+                className="hover:text-accent transition-colors"
+              >
                 Login
               </Link>
-              <Link href="/register" onClick={() => setMenuOpen(false)}>
+
+              <Link
+                href="/register"
+                onClick={() => setMenuOpen(false)}
+                className="hover:text-accent transition-colors"
+              >
                 Register
               </Link>
             </>
           ) : (
             <>
-              <span>Hola, {session.user?.name ?? session.user?.email}</span>
+              <span className="text-sm text-borderMain">
+                Hola, {session.user?.name ?? session.user?.email}
+              </span>
+
               <button
                 onClick={() => {
                   signOut({ callbackUrl: "/" });
                   setMenuOpen(false);
                 }}
-                className="text-red-300"
+                className="text-red-400 hover:text-red-600 transition-colors text-left"
               >
                 Logout
               </button>

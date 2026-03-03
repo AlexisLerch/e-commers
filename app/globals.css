@@ -37,7 +37,7 @@ body {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bgMain: #0a0a0a; /* fondo oscuro */
+    --color-bgMain: #1d1c1c; /* fondo oscuro */
     --color-textMain: #99a1af; /* texto claro */
     --color-borderMain: #d1d5db;
     --color-accent: #364153; /* acento blanco */
@@ -51,10 +51,10 @@ body {
 }
 
 @theme {
-  --color-bgMain: #ffffff;
-  --color-textMain: #171717;
+  --color-bgMain: #1d1c1c; /* fondo oscuro */
+  --color-textMain: #99a1af; /* texto claro */
   --color-borderMain: #d1d5db;
-  --color-accent: #000000;
+  --color-accent: #364153; /* acento blanco */
   --color-error: #ff0000;
   --color-accentHover: oklch(70.4% 0.191 22.216);
 }
