@@ -39,7 +39,7 @@ body {
   :root {
     --color-bgMain: #0a0a0a; /* fondo oscuro */
     --color-textMain: #99a1af; /* texto claro */
-    --color-borderMain: #333333;
+    --color-borderMain: #d1d5db;
     --color-accent: #364153; /* acento blanco */
   }
 }

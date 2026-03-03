@@ -60,7 +60,7 @@ export default function Navbar({ cartCount = 0 }: { cartCount?: number }) {
           <>
             <Link
               href="/login"
-              className={`relative pb-1 transition-colors duration-200 hover:text-accent ${
+              className={`relative pb-1 transition-colors text-borderMain duration-200 hover:text-accent ${
                 isActive("/login") ? "text-accent" : ""
               }`}
             >
@@ -74,7 +74,7 @@ export default function Navbar({ cartCount = 0 }: { cartCount?: number }) {
 
             <Link
               href="/register"
-              className={`relative pb-1 transition-colors duration-200 hover:text-accent ${
+              className={`relative pb-1 transition-colors text-borderMain duration-200 hover:text-accent ${
                 isActive("/register") ? "text-accent" : ""
               }`}
             >
