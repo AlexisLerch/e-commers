@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
+import { useSession, signIn } from "next-auth/react";
 import { Product } from "@/types/product";
-import { useCartStore } from "@/store/cart"; // <-- importamos store
+import { useCartStore } from "@/store/cart";
 
 interface ProductDetailProps {
   product: Product;
@@ -11,8 +12,14 @@ interface ProductDetailProps {
 export default function ProductDetail({ product }: ProductDetailProps) {
   const [quantity, setQuantity] = useState(1);
   const addToCart = useCartStore((state) => state.addToCart);
+  const { data: session } = useSession(); // obtenemos sesión
 
   const handleAddToCart = () => {
+    if (!session) {
+      signIn(); // abre el login de NextAuth
+      return;
+    }
+
     addToCart(product, quantity);
     alert(`Añadiste ${quantity} x ${product.name} al carrito`);
   };
@@ -41,9 +48,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           />
           <button
             onClick={handleAddToCart}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"
           >
-            Añadir al carrito
+            {session ? "Añadir al carrito" : "Inicia sesión para agregar"}
           </button>
         </div>
       </div>

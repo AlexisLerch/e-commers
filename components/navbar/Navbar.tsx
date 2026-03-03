@@ -126,7 +126,13 @@ export default function Navbar({ cartCount = 0 }: { cartCount?: number }) {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[90%] max-w-sm bg-[#2e2b2b] rounded-xl shadow-lg flex flex-col p-6 gap-4 md:hidden z-50 transition-all duration-300 animate-in fade-in slide-in-from-top-2">
+        <div
+          className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[90%] max-w-sm bg-[#2e2b2b] rounded-xl shadow-xl flex flex-col p-6 gap-4 md:hidden z-50 transition-all duration-300 ${
+            menuOpen
+              ? "opacity-100 translate-y-0 pointer-events-auto"
+              : "opacity-0 -translate-y-4 pointer-events-none"
+          }`}
+        >
           <Link
             href="/product"
             onClick={() => setMenuOpen(false)}
@@ -163,7 +169,7 @@ export default function Navbar({ cartCount = 0 }: { cartCount?: number }) {
             </>
           ) : (
             <>
-              <span className="text-sm text-borderMain">
+              <span className="text-sm text-gray-400">
                 Hola, {session.user?.name ?? session.user?.email}
               </span>
 

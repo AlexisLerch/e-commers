@@ -9,7 +9,7 @@ export default async function HomePage() {
     <div className="max-w-6xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Productos</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {products.map((product) => (
+        {products.map((product: typeof products[number]) => (
           <Link key={product.id} href={`/product/${product.slug}`}>
             <div className="border p-4 cursor-pointer hover:shadow-lg transition">
               <Image

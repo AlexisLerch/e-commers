@@ -1,9 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
-    domains: ["bpmwwrxlofynyoifxsms.supabase.co"], // <-- tu dominio de Supabase
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "bpmwwrxlofynyoifxsms.supabase.co",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
   },
 };
 

@@ -3,7 +3,12 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
 export default async function FeaturedProducts() {
-  const products = await prisma.product.findMany();
+  const products = await prisma.product.findMany({
+    take: 9,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
   if (!products.length) {
     return null;
@@ -16,7 +21,7 @@ export default async function FeaturedProducts() {
       </h2>
 
       <div className="grid md:grid-cols-3 gap-8">
-        {products.map((product) => (
+        {products.map((product: (typeof products)[number]) => (
           <Link
             key={product.id}
             href={`/product/${product.slug}`}
