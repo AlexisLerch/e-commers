@@ -27,21 +27,21 @@ export default async function CategoryPage({ params }: Props) {
     );
   }
 
-  const products: Product[] = (
-    await prisma.product.findMany({
-      where: { categoryId: category.id },
-    })
-  ).map((p: any) => ({
-    // ⚠️ le decimos explícitamente el tipo aquí
-    id: p.id,
-    name: p.name,
-    slug: p.slug,
-    description: p.description,
-    price: p.price,
-    image: p.image || "/products/default.jpg",
-    categoryId: p.categoryId,
-  }));
+  const productsFromDB = await prisma.product.findMany({
+    where: { categoryId: category.id },
+  });
 
+  const products: Product[] = productsFromDB
+    .filter((p) => p.categoryId !== null)
+    .map((p) => ({
+      id: p.id,
+      name: p.name,
+      slug: p.slug,
+      description: p.description,
+      price: p.price,
+      image: p.image || "/products/default.jpg",
+      categoryId: p.categoryId as string,
+    }));
   if (!products.length) {
     return (
       <div className="p-10">
