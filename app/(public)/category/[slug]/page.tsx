@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
-import { Product } from "@/types/product"; // tu interface Product
+import { Product } from "@/types/product";
 
 interface Props {
   params: { slug: string };
