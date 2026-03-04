@@ -5,7 +5,7 @@ export interface Product {
   description: string;
   price: number;
   image: string;
-  categoryId: string;
+  categoryId: string | null; // <-- permitir null
 }
 
 export interface CartItem extends Product {
