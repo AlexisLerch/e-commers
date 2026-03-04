@@ -1,3 +1,5 @@
+"use client"; // solo si necesitas client-side interactivity
+
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,13 +10,13 @@ interface Props {
 }
 
 export default async function CategoryPage({ params }: Props) {
-  const resolvedParams = await params; // <-- esperar el Promise
-  const { slug } = resolvedParams; // ahora sí destructuramos
+  const { slug } = params; // params ya viene desestructurado correctamente
 
   if (!slug) {
     return <div>Slug inválido</div>;
   }
 
+  // Buscar categoría
   const category = await prisma.category.findUnique({
     where: { slug },
   });
@@ -27,11 +29,13 @@ export default async function CategoryPage({ params }: Props) {
     );
   }
 
-  const products: Product[] = (
-    await prisma.product.findMany({
-      where: { categoryId: category.id },
-    })
-  ).map((p: any) => ({
+  // Buscar productos de la categoría
+  const productsFromDb = await prisma.product.findMany({
+    where: { categoryId: category.id },
+  });
+
+  // Mapear a Product[] para TypeScript
+  const products: Product[] = productsFromDb.map((p) => ({
     id: p.id,
     name: p.name,
     slug: p.slug,
@@ -56,11 +60,11 @@ export default async function CategoryPage({ params }: Props) {
       <h1 className="text-3xl font-bold mb-8 capitalize">{category.name}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {products.map((product) => (
+        {products.map((product: Product) => (
           <Link key={product.id} href={`/product/${product.slug}`}>
             <div className="border p-4 hover:shadow-lg transition cursor-pointer">
               <Image
-                src={product.image || "/products/default.jpg"}
+                src={product.image}
                 alt={product.name}
                 width={400}
                 height={400}
