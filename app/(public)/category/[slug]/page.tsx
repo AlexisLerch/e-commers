@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
+import { Product } from "@/types/product"; // tu interface Product
 
 interface Props {
   params: { slug: string };
@@ -26,11 +27,19 @@ export default async function CategoryPage({ params }: Props) {
     );
   }
 
-  const products = await prisma.product.findMany({
-    where: { categoryId: category.id },
-    include: { category: true },
-  });
-
+  const products: Product[] = (
+    await prisma.product.findMany({
+      where: { categoryId: category.id },
+    })
+  ).map((p) => ({
+    id: p.id,
+    name: p.name,
+    slug: p.slug,
+    description: p.description,
+    price: p.price,
+    image: p.image || "/products/default.jpg",
+    categoryId: p.categoryId || "",
+  }));
   if (!products.length) {
     return (
       <div className="p-10">
