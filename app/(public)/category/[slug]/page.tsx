@@ -1,14 +1,14 @@
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
+import { Product } from "@/types/product";
 
 interface Props {
   params: { slug: string };
 }
 
 export default async function CategoryPage({ params }: Props) {
-  const resolvedParams = await params; // <-- esperar el Promise
-  const { slug } = resolvedParams; // ahora sí destructuramos
+  const { slug } = params; // ✅ No es Promise, solo un objeto
 
   if (!slug) {
     return <div>Slug inválido</div>;
@@ -26,9 +26,9 @@ export default async function CategoryPage({ params }: Props) {
     );
   }
 
-  const products = await prisma.product.findMany({
+  // Tipamos explícitamente products
+  const products: Product[] = await prisma.product.findMany({
     where: { categoryId: category.id },
-    include: { category: true },
   });
 
   if (!products.length) {
@@ -46,21 +46,25 @@ export default async function CategoryPage({ params }: Props) {
       <h1 className="text-3xl font-bold mb-8 capitalize">{category.name}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {products.map((product) => (
-          <Link key={product.id} href={`/product/${product.slug}`}>
-            <div className="border p-4 hover:shadow-lg transition cursor-pointer">
-              <Image
-                src={product.image || "/products/default.jpg"}
-                alt={product.name}
-                width={400}
-                height={400}
-                className="object-cover w-full h-64"
-              />
-              <h2 className="mt-4 font-semibold">{product.name}</h2>
-              <p className="text-gray-500">${product.price}</p>
-            </div>
-          </Link>
-        ))}
+        {products.map(
+          (
+            product: Product, // ✅ Tipado explícito del map
+          ) => (
+            <Link key={product.id} href={`/product/${product.slug}`}>
+              <div className="border p-4 hover:shadow-lg transition cursor-pointer">
+                <Image
+                  src={product.image || "/products/default.jpg"}
+                  alt={product.name}
+                  width={400}
+                  height={400}
+                  className="object-cover w-full h-64"
+                />
+                <h2 className="mt-4 font-semibold">{product.name}</h2>
+                <p className="text-gray-500">${product.price}</p>
+              </div>
+            </Link>
+          ),
+        )}
       </div>
     </div>
   );
