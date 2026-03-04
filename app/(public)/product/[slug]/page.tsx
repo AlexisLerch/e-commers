@@ -26,6 +26,8 @@ export default async function ProductPage({ params }: PageProps) {
     description: productFromDB.description,
     price: productFromDB.price,
     image: productFromDB.image || "/products/default.jpg",
+    categoryId: productFromDB.categoryId || "",
+    
   };
 
   return <ProductDetail product={product} />;
