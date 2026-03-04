@@ -9,13 +9,12 @@ interface PageProps {
 }
 
 export default async function ProductPage({ params }: PageProps) {
-  // esperar a que params se resuelva
-  const resolvedParams = await params;
+  const { slug } = await params;
 
-  if (!resolvedParams?.slug) return notFound();
+  if (!slug) return notFound();
 
   const productFromDB = await prisma.product.findUnique({
-    where: { slug: resolvedParams.slug },
+    where: { slug },
   });
 
   if (!productFromDB) return notFound();
