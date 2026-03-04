@@ -31,15 +31,17 @@ export default async function CategoryPage({ params }: Props) {
     await prisma.product.findMany({
       where: { categoryId: category.id },
     })
-  ).map((p) => ({
+  ).map((p: any) => ({
+    // ⚠️ le decimos explícitamente el tipo aquí
     id: p.id,
     name: p.name,
     slug: p.slug,
     description: p.description,
     price: p.price,
     image: p.image || "/products/default.jpg",
-    categoryId: p.categoryId || "",
+    categoryId: p.categoryId,
   }));
+
   if (!products.length) {
     return (
       <div className="p-10">
