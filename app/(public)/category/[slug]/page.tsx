@@ -1,5 +1,3 @@
-"use client"; // solo si necesitas client-side interactivity
-
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,16 +8,13 @@ interface Props {
 }
 
 export default async function CategoryPage({ params }: Props) {
-  const { slug } = params; // params ya viene desestructurado correctamente
+  const { slug } = await params; // 🔹 importante: await aquí
 
   if (!slug) {
     return <div>Slug inválido</div>;
   }
 
-  // Buscar categoría
-  const category = await prisma.category.findUnique({
-    where: { slug },
-  });
+  const category = await prisma.category.findUnique({ where: { slug } });
 
   if (!category) {
     return (
@@ -29,12 +24,10 @@ export default async function CategoryPage({ params }: Props) {
     );
   }
 
-  // Buscar productos de la categoría
   const productsFromDb = await prisma.product.findMany({
     where: { categoryId: category.id },
   });
 
-  // Mapear a Product[] para TypeScript
   const products: Product[] = productsFromDb.map((p) => ({
     id: p.id,
     name: p.name,
