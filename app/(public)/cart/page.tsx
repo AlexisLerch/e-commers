@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import CartComponent from "@/components/cart/CartComponent";
+import BackButton from "@/components/ui/BackButton";
 
 export default function CartPage() {
   const { data: session, status } = useSession();
@@ -23,6 +24,7 @@ export default function CartPage() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
+      <BackButton />
       <h1 className="text-2xl font-bold mb-4">Tu carrito</h1>
       <CartComponent />
     </div>

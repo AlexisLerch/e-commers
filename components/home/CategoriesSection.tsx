@@ -14,7 +14,7 @@ export default async function CategoriesSection() {
     <section className="px-4">
       <h2 className="text-2xl font-bold mb-6 text-textMain">Categorías</h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
         {categories.map((category: (typeof categories)[number]) => (
           <Link
             key={category.id}

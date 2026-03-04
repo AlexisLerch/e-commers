@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types/product";
+import BackButton from "@/components/ui/BackButton";
 
 interface Props {
   params: { slug: string };
@@ -50,6 +51,7 @@ export default async function CategoryPage({ params }: Props) {
 
   return (
     <div className="p-10">
+      <BackButton />
       <h1 className="text-3xl font-bold mb-8 capitalize">{category.name}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
