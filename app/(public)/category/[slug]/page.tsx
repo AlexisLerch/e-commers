@@ -32,7 +32,6 @@ export default async function CategoryPage({ params }: Props) {
       where: { categoryId: category.id },
     })
   ).map((p: any) => ({
-    // ⚠️ le decimos explícitamente el tipo aquí
     id: p.id,
     name: p.name,
     slug: p.slug,
