@@ -4,53 +4,104 @@ import { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar({ cartCount = 0 }: { cartCount?: number }) {
   const { data: session } = useSession();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hoveredLogo, setHoveredLogo] = useState(false);
 
   const isActive = (path: string) => pathname === path;
 
+  const isHome = pathname === "/";
+  const fullText = "MyEcommerce";
+  const shortText = "MyEc";
+
+  const showFull = isHome || hoveredLogo;
+  const visibleLength = showFull ? fullText.length : shortText.length;
+
+  const letters = fullText.split("");
+
+  // colores progresivos
+  const letterColors = [
+    "text-white",
+    "text-gray-200",
+    "text-gray-300",
+    "text-gray-400",
+    "text-gray-400",
+    "text-gray-500",
+    "text-gray-500",
+    "text-gray-500",
+    "text-gray-500",
+    "text-gray-500",
+    "text-gray-500",
+  ];
+
   return (
-    <nav className="bg-[#2e2b2b] font-bold text-textMain shadow-md p-3 sm:pr-14 sm:pl-14 flex justify-between items-center relative">
-      {/* Logo */}
-      <div className="text-3xl font-bold hover:text-accent transition-colors">
-        <Link href="/">MiEcommerce</Link>
-      </div>
+    <nav className="bg-[#2e2b2b] font-bold text-white shadow-md p-3 sm:pr-14 sm:pl-14 flex justify-between items-center relative">
+      {/* LOGO */}
+      <Link href="/">
+        <div
+          onMouseEnter={() => setHoveredLogo(true)}
+          onMouseLeave={() => setHoveredLogo(false)}
+          className="text-3xl font-bold cursor-pointer select-none flex"
+        >
+          {letters.map((letter, i) => {
+            const isVisible = i < visibleLength;
+
+            return (
+              <AnimatePresence key={i}>
+                {isVisible && (
+                  <motion.span
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 4 }}
+                    transition={{
+                      duration: 0.2,
+                      delay: i * 0.05,
+                    }}
+                    className={letterColors[i] || "text-gray-800"}
+                  >
+                    {letter}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            );
+          })}
+        </div>
+      </Link>
 
       {/* Desktop Links */}
       <div className="hidden md:flex gap-6 items-center">
-        {/* Productos */}
         <Link
           href="/product"
-          className={`relative pb-1 transition-colors duration-200 hover:text-accent ${
-            isActive("/product") ? "text-accent" : ""
+          className={`relative pb-1 transition-colors duration-200 hover:text-gray-300 ${
+            isActive("/product") ? "text-gray-300" : ""
           }`}
         >
           Productos
           <span
-            className={`absolute left-0 -bottom-0.5 h-0.5 w-full bg-accent transform transition-transform duration-300 origin-left ${
+            className={`absolute left-0 -bottom-0.5 h-0.5 w-full bg-gray-300 transform transition-transform duration-300 origin-left ${
               isActive("/product") ? "scale-x-100" : "scale-x-0"
             }`}
           />
         </Link>
 
-        {/* Carrito */}
         <Link
           href="/cart"
-          className={`relative pb-1 transition-colors duration-200 hover:text-accent ${
-            isActive("/cart") ? "text-accent" : ""
+          className={`relative pb-1 transition-colors duration-200 hover:text-gray-300 ${
+            isActive("/cart") ? "text-gray-300" : ""
           }`}
         >
           Carrito
           {cartCount > 0 && (
-            <span className="absolute -top-2 -right-3 bg-accent text-bgMain text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            <span className="absolute -top-2 -right-3 bg-gray-300 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center">
               {cartCount}
             </span>
           )}
           <span
-            className={`absolute left-0 -bottom-0.5 h-0.5 w-full bg-accent transform transition-transform duration-300 origin-left ${
+            className={`absolute left-0 -bottom-0.5 h-0.5 w-full bg-gray-300 transform transition-transform duration-300 origin-left ${
               isActive("/cart") ? "scale-x-100" : "scale-x-0"
             }`}
           />
@@ -60,13 +111,13 @@ export default function Navbar({ cartCount = 0 }: { cartCount?: number }) {
           <>
             <Link
               href="/login"
-              className={`relative pb-1 transition-colors text-borderMain duration-200 hover:text-accent ${
-                isActive("/login") ? "text-accent" : ""
+              className={`relative pb-1 transition-colors text-gray-400 duration-200 hover:text-gray-200 ${
+                isActive("/login") ? "text-gray-200" : ""
               }`}
             >
               Login
               <span
-                className={`absolute left-0 -bottom-0.5 h-0.5 w-full bg-accent transform transition-transform duration-300 origin-left ${
+                className={`absolute left-0 -bottom-0.5 h-0.5 w-full bg-gray-300 transform transition-transform duration-300 origin-left ${
                   isActive("/login") ? "scale-x-100" : "scale-x-0"
                 }`}
               />
@@ -74,13 +125,13 @@ export default function Navbar({ cartCount = 0 }: { cartCount?: number }) {
 
             <Link
               href="/register"
-              className={`relative pb-1 transition-colors text-borderMain duration-200 hover:text-accent ${
-                isActive("/register") ? "text-accent" : ""
+              className={`relative pb-1 transition-colors text-gray-400 duration-200 hover:text-gray-200 ${
+                isActive("/register") ? "text-gray-200" : ""
               }`}
             >
               Register
               <span
-                className={`absolute left-0 -bottom-0.5 h-0.5 w-full bg-accent transform transition-transform duration-300 origin-left ${
+                className={`absolute left-0 -bottom-0.5 h-0.5 w-full bg-gray-300 transform transition-transform duration-300 origin-left ${
                   isActive("/register") ? "scale-x-100" : "scale-x-0"
                 }`}
               />
@@ -88,11 +139,13 @@ export default function Navbar({ cartCount = 0 }: { cartCount?: number }) {
           </>
         ) : (
           <>
-            <span>Hola, {session.user?.name ?? session.user?.email}</span>
+            <span className="text-gray-300">
+              Hola, {session.user?.name ?? session.user?.email}
+            </span>
 
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="text-red-300 hover:text-red-600 transition-colors duration-200"
+              className="text-red-300 hover:text-red-500 transition-colors duration-200"
             >
               Logout
             </button>
@@ -126,17 +179,11 @@ export default function Navbar({ cartCount = 0 }: { cartCount?: number }) {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div
-          className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[90%] max-w-sm bg-[#2e2b2b] rounded-xl shadow-xl flex flex-col p-6 gap-4 md:hidden z-50 transition-all duration-300 ${
-            menuOpen
-              ? "opacity-100 translate-y-0 pointer-events-auto"
-              : "opacity-0 -translate-y-4 pointer-events-none"
-          }`}
-        >
+        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[90%] max-w-sm bg-[#2e2b2b] rounded-xl shadow-xl flex flex-col p-6 gap-4 md:hidden z-50">
           <Link
             href="/product"
             onClick={() => setMenuOpen(false)}
-            className="hover:text-accent transition-colors"
+            className="hover:text-gray-300 transition-colors"
           >
             Productos
           </Link>
@@ -144,7 +191,7 @@ export default function Navbar({ cartCount = 0 }: { cartCount?: number }) {
           <Link
             href="/cart"
             onClick={() => setMenuOpen(false)}
-            className="hover:text-accent transition-colors"
+            className="hover:text-gray-300 transition-colors"
           >
             Carrito
           </Link>
@@ -154,7 +201,7 @@ export default function Navbar({ cartCount = 0 }: { cartCount?: number }) {
               <Link
                 href="/login"
                 onClick={() => setMenuOpen(false)}
-                className="hover:text-accent transition-colors"
+                className="hover:text-gray-300 transition-colors"
               >
                 Login
               </Link>
@@ -162,7 +209,7 @@ export default function Navbar({ cartCount = 0 }: { cartCount?: number }) {
               <Link
                 href="/register"
                 onClick={() => setMenuOpen(false)}
-                className="hover:text-accent transition-colors"
+                className="hover:text-gray-300 transition-colors"
               >
                 Register
               </Link>
