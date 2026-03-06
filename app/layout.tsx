@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SessionLayout from "@/components/SessionLayout";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
@@ -24,6 +25,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-bgMain text-textMain`}
       >
         <SessionLayout>{children}</SessionLayout>
+        <Toaster position="top-right" richColors expand />
       </body>
     </html>
   );

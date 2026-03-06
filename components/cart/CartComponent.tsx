@@ -1,38 +1,15 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
-import { CartItem as CartItemType } from "@/types/product";
+import { useRouter } from "next/navigation";
+import { useCartStore } from "@/store/cart";
 
 export default function CartComponent() {
-  const [cart, setCart] = useState<CartItemType[]>([]);
-  const [mounted, setMounted] = useState(false);
+  const cart = useCartStore((state) => state.cart);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
 
-  // Solo marcar que estamos en cliente
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const router = useRouter();
 
-  // Cargar carrito solo si estamos montados
-  const loadCart = () => {
-    const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
-    setCart(storedCart);
-  };
-
-  useEffect(() => {
-    if (!mounted) return;
-    loadCart();
-  }, [mounted]);
-
-  // Guardar cambios en localStorage
-  useEffect(() => {
-    if (mounted) localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart, mounted]);
-
-  const removeFromCart = (id: string) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  if (!mounted) return null; // evita hydration error
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -50,14 +27,16 @@ export default function CartComponent() {
               className="object-cover rounded"
             />
           </div>
+
           <div className="flex-1">
             <p className="font-semibold">{item.name}</p>
             <p>Cantidad: {item.quantity}</p>
             <p>Precio: ${item.price}</p>
           </div>
+
           <button
             onClick={() => removeFromCart(item.id)}
-            className="bg-red-500 text-white px-2 py-1 rounded"
+            className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
           >
             Eliminar
           </button>
@@ -65,10 +44,25 @@ export default function CartComponent() {
       ))}
 
       {cart.length > 0 && (
-        <p className="mt-4 font-bold text-right">
-          Total: $
-          {cart.reduce((sum, item) => sum + item.price * item.quantity, 0)}
-        </p>
+        <div className="mt-6 flex flex-col items-end gap-4">
+          <p className="font-bold text-lg">Total: ${total}</p>
+
+          <div className="flex gap-3">
+            <button
+              onClick={() => router.push("/products")}
+              className="border px-5 py-2 rounded-lg hover:bg-gray-100 transition"
+            >
+              Seguir comprando
+            </button>
+
+            <button
+              onClick={() => router.push("/checkout")}
+              className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition"
+            >
+              Comprar
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
